@@ -20,8 +20,15 @@ public class Item {
     @Column(nullable = false)
     private Integer quantity;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orders = new ArrayList<>();
+    @Column(nullable = false)
+    private Integer price;
+
+    @ManyToMany(mappedBy = "items")
+    private List<Order> orders;
+
+    public List<Order> getOrders() {
+        return orders;
+    }
 
     public Long getId() {
         return id;
@@ -55,11 +62,15 @@ public class Item {
         this.quantity = quantity;
     }
 
-    public List<OrderItem> getOrders() {
-        return orders;
+    public Integer getPrice() {
+        return price;
     }
 
-    public void setOrders(List<OrderItem> orders) {
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
 }

@@ -11,6 +11,14 @@ import javax.persistence.Table;
 @Table(name = "clients")
 public class Client {
 
+    public Client() {
+    }
+
+    // Constructor with one argument
+    public Client(Long id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -28,4 +28,12 @@ public class ClientService {
         }
     }
 
+    public Client getClientByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
+    public Client getClientById(Long id) {
+        return clientRepository.findById(id).get();
+    }
+
 }
