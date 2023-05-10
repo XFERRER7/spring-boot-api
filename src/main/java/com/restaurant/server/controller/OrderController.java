@@ -1,16 +1,12 @@
 package com.restaurant.server.controller;
 
 import com.restaurant.server.model.*;
+import com.restaurant.server.model.DTO.OrderDTO;
+import com.restaurant.server.model.DTO.OrderRequestDto;
 import com.restaurant.server.service.OrderService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,11 +20,19 @@ public class OrderController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<String> createOrder(@RequestBody OrderRequestDto orderRequest) {
 
-        orderService.createOrder(orderRequest.getClientId(), orderRequest.getItems());
+        try {
+            Order order = orderService.createOrder(orderRequest.getClientId(), orderRequest.getItems());
+            return ResponseEntity.ok("{\"message\": \"Order created\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return null;
+    }
+    @GetMapping("get-all")
+    public List<OrderDTO> getAllOrders() {
+        return orderService.getAllOrders();
     }
 
 }

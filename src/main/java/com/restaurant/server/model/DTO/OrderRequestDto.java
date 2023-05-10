@@ -1,11 +1,11 @@
-package com.restaurant.server.model;
+package com.restaurant.server.model.DTO;
 
 import java.util.List;
 
-public class OrderRequest {
+public class OrderRequestDto {
 
     private Long clientId;
-    private List<OrderItemRequest> items;
+    private List<OrderItemRequestDto> items;
 
     public Long getClientId() {
         return clientId;
@@ -15,11 +15,11 @@ public class OrderRequest {
         this.clientId = clientId;
     }
 
-    public List<OrderItemRequest> getItems() {
+    public List<OrderItemRequestDto> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItemRequest> items) {
+    public void setItems(List<OrderItemRequestDto> items) {
         this.items = items;
     }
 }

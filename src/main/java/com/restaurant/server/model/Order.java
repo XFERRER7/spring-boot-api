@@ -2,7 +2,9 @@ package com.restaurant.server.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -22,13 +24,9 @@ public class Order {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
-    @ManyToMany()
-    @JoinTable(
-            name = "orders_items",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
-    private List<Item> items;
+    @OneToMany(mappedBy = "order")
+    private Set<OrderItem> orderItems = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -62,11 +60,11 @@ public class Order {
         this.client = client;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }

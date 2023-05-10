@@ -14,7 +14,6 @@ public class Client {
     public Client() {
     }
 
-    // Constructor with one argument
     public Client(Long id) {
         this.id = id;
     }

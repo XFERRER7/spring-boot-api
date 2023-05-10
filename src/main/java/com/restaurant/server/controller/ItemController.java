@@ -4,10 +4,7 @@ import com.restaurant.server.model.Item;
 import com.restaurant.server.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("item")
@@ -23,6 +20,19 @@ public class ItemController {
         try {
             Item newItem = itemService.createItem(item);
             return ResponseEntity.ok().body(item);
+        }
+        catch(Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping("get-all")
+    public ResponseEntity<Iterable<Item>> getAllItems() {
+
+        try {
+            Iterable<Item> items = itemService.getAllItems();
+            return ResponseEntity.ok().body(items);
         }
         catch(Exception e) {
             return ResponseEntity.notFound().build();

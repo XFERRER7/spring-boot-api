@@ -1,13 +1,13 @@
-package com.restaurant.server.model;
+package com.restaurant.server.model.DTO;
 
-public class OrderItemRequest {
+public class OrderItemRequestDto {
     private Long itemId;
     private Integer quantity;
 
-    public OrderItemRequest() {
+    public OrderItemRequestDto() {
     }
 
-    public OrderItemRequest(Long itemId, Integer quantity) {
+    public OrderItemRequestDto(Long itemId, Integer quantity) {
         this.itemId = itemId;
         this.quantity = quantity;
     }

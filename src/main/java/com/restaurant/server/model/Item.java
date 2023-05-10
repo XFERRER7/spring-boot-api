@@ -1,8 +1,12 @@
 package com.restaurant.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "items")
@@ -23,12 +27,9 @@ public class Item {
     @Column(nullable = false)
     private Integer price;
 
-    @ManyToMany(mappedBy = "items")
-    private List<Order> orders;
-
-    public List<Order> getOrders() {
-        return orders;
-    }
+    @JsonIgnore
+    @OneToMany(mappedBy = "item")
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -70,7 +71,11 @@ public class Item {
         this.price = price;
     }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }
