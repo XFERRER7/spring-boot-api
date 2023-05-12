@@ -4,6 +4,7 @@ import com.restaurant.server.model.*;
 import com.restaurant.server.model.DTO.ItemDTO;
 import com.restaurant.server.model.DTO.OrderDTO;
 import com.restaurant.server.model.DTO.OrderItemRequestDto;
+import com.restaurant.server.model.DTO.OrderPdfDTO;
 import com.restaurant.server.repository.IOrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +22,7 @@ public class OrderService {
     private final OrderItemService orderItemService;
 
 
-    public OrderService(IOrderRepository orderRepository, ClientService clientService,
-                        ItemService itemService, OrderItemService orderItemService) {
+    public OrderService(IOrderRepository orderRepository, ClientService clientService, ItemService itemService, OrderItemService orderItemService) {
         this.orderRepository = orderRepository;
         this.clientService = clientService;
         this.itemService = itemService;
@@ -54,7 +54,10 @@ public class OrderService {
 
 
         //Calcula o valor total do pedido
-        Integer amount = listItems.stream().mapToInt(Item::getPrice).sum();
+        Integer amount = 0;
+        for (Item item : listItems) {
+            amount += item.getPrice() * items.stream().filter(orderItemRequest -> orderItemRequest.getItemId().equals(item.getId())).findFirst().orElseThrow(() -> new RuntimeException("Order item not found")).getQuantity();
+        }
 
 
         Order orderSaved = createRawOrder(clientSaved, amount);
@@ -62,11 +65,7 @@ public class OrderService {
         List<OrderItem> orderItemsSaved = new ArrayList<>();
         for (Item item : listItems) {
 
-            int quantity = items.stream()
-                    .filter(orderItemRequest -> orderItemRequest.getItemId().equals(item.getId()))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Order item not found"))
-                    .getQuantity();
+            int quantity = items.stream().filter(orderItemRequest -> orderItemRequest.getItemId().equals(item.getId())).findFirst().orElseThrow(() -> new RuntimeException("Order item not found")).getQuantity();
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(orderSaved);
@@ -136,4 +135,43 @@ public class OrderService {
         return orderDTOs;
     }
 
+    public List<OrderPdfDTO> getReport() {
+
+        List<Order> allOrders = orderRepository.findAll();
+        List<OrderPdfDTO> ordersPdf = new ArrayList<>();
+
+        for (Order order : allOrders) {
+
+            OrderPdfDTO orderPdfDTO = new OrderPdfDTO();
+
+            orderPdfDTO.setIdOrder(order.getId());
+
+            orderPdfDTO.setAmount(order.getAmount());
+
+            String createdAt = order.getCreatedAt();
+            String[] firstSplit = createdAt.split("T");
+            String[] secondtSplit = firstSplit[0].split("-");
+            String createdAtFinal = secondtSplit[2] + "/" + secondtSplit[1] + "/" + secondtSplit[0];
+
+            orderPdfDTO.setCreatedAt(createdAtFinal);
+
+            for (OrderItem orderItem : order.getOrderItems()) {
+
+                Integer quantity = orderItem.getItemsQuantity();
+
+                if (orderPdfDTO.getItemsQuantity() != null) {
+                    orderPdfDTO.setItemsQuantity(orderPdfDTO.getItemsQuantity() + quantity);
+                }
+                else {
+                    orderPdfDTO.setItemsQuantity(quantity);
+                }
+
+            }
+
+            ordersPdf.add(orderPdfDTO);
+        }
+
+        return ordersPdf;
+
+    }
 }
