@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("item")
+@CrossOrigin(origins = "*")
 public class ItemController {
 
 
@@ -19,7 +20,7 @@ public class ItemController {
 
         try {
             Item newItem = itemService.createItem(item);
-            return ResponseEntity.ok().body(item);
+            return ResponseEntity.ok().body(newItem);
         }
         catch(Exception e) {
             return ResponseEntity.notFound().build();
@@ -39,5 +40,12 @@ public class ItemController {
         }
 
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Item> updateItem(@RequestBody Item updatedItem) {
+        Item updated = itemService.updateItem(updatedItem);
+        return ResponseEntity.ok(updated);
+    }
+    
 
 }

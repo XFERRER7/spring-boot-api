@@ -19,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("order")
+@CrossOrigin(origins = "*")
 public class OrderController {
 
     private final OrderService orderService;
@@ -31,13 +32,14 @@ public class OrderController {
     public ResponseEntity<String> createOrder(@RequestBody OrderRequestDto orderRequest) {
 
         try {
-            Order order = orderService.createOrder(orderRequest.getClientId(), orderRequest.getItems());
+            orderService.createOrder(orderRequest.getClientId(), orderRequest.getItems());
             return ResponseEntity.ok("{\"message\": \"Order created\"}");
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
 
     }
+
     @GetMapping("get-all")
     public List<OrderDTO> getAllOrders() {
         return orderService.getAllOrders();

@@ -34,6 +34,8 @@ public class ItemService {
         Item existingItem = itemRepository.findById(item.getId()).orElse(null);
         existingItem.setName(item.getName());
         existingItem.setPrice(item.getPrice());
+        existingItem.setDescription(item.getDescription());
+        existingItem.setType(item.getType());
         existingItem.setQuantity(item.getQuantity());
         return itemRepository.save(existingItem);
     }

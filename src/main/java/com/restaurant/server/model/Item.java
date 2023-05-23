@@ -3,9 +3,7 @@ package com.restaurant.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,6 +17,7 @@ public class Item {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
@@ -26,6 +25,9 @@ public class Item {
 
     @Column(nullable = false)
     private Integer price;
+
+    @Column(nullable = false)
+    private String type;
 
     @JsonIgnore
     @OneToMany(mappedBy = "item")
@@ -69,6 +71,14 @@ public class Item {
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Set<OrderItem> getOrderItems() {
