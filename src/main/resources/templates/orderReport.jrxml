@@ -168,7 +168,7 @@
                             <textField>
                                 <reportElement x="0" y="0" width="110" height="30" uuid="cf2f69dd-45ca-41e0-8dcd-c74f22172591"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
-                                <textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+                                 <textFieldExpression><![CDATA["R$ " + $F{amount}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>

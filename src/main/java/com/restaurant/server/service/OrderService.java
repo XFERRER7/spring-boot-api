@@ -146,13 +146,12 @@ public class OrderService {
 
             orderPdfDTO.setIdOrder(order.getId());
 
-            orderPdfDTO.setAmount(order.getAmount());
+            orderPdfDTO.setAmount(order.getAmount() / 100);
 
             String createdAt = order.getCreatedAt();
             String[] firstSplit = createdAt.split("T");
             String[] secondtSplit = firstSplit[0].split("-");
             String createdAtFinal = secondtSplit[2] + "/" + secondtSplit[1] + "/" + secondtSplit[0];
-
             orderPdfDTO.setCreatedAt(createdAtFinal);
 
             for (OrderItem orderItem : order.getOrderItems()) {
