@@ -19,12 +19,12 @@ public class AdminService {
         return iAdminRepository.save(admin);
     }
 
-    public boolean authenticateAdmin(String email, String password) {
+    public Admin authenticateAdmin(String email, String password) {
         Admin admin = iAdminRepository.findByEmail(email);
         if (admin != null && admin.getPassword().equals(password)) {
-            return true;
+            return admin;
         } else {
-            return false;
+            return null;
         }
     }
 

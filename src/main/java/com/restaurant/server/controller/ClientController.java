@@ -29,15 +29,15 @@ public class ClientController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticateClient(@RequestBody Client client) {
+    public ResponseEntity<Client> authenticateClient(@RequestBody Client client) {
         try {
-            boolean response = clientService.authenticateClient(client.getEmail(), client.getPassword());
+            Client response = clientService.authenticateClient(client.getEmail(), client.getPassword());
 
-            if(response) {
-                return ResponseEntity.ok().body("{\"message\": \"Authenticated\"}");
+            if(response != null) {
+                return ResponseEntity.ok().body(response);
             }
             else {
-                return ResponseEntity.badRequest().body("{\"message\": \"Client not found\"}");
+                return ResponseEntity.badRequest().build();
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

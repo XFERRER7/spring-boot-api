@@ -50,7 +50,7 @@ public class OrderController {
 
         List<OrderPdfDTO> orders = orderService.getReport();
 
-        String filePath = "C:\\Users\\Xande\\Downloads\\server\\server\\src\\main\\resources\\templates\\orderReport.jrxml";
+        String filePath = "src\\main\\resources\\templates\\orderReport.jrxml";
 
         JasperReport report = JasperCompileManager.compileReport(filePath);
 

@@ -58,4 +58,16 @@ public class ItemService {
 
     }
 
+    public void deleteItem(Long id) {
+
+        Item existingItem = itemRepository.findById(id).orElse(null);
+
+        if (existingItem == null) {
+            throw new RuntimeException("Item not found");
+        }
+
+        itemRepository.deleteById(id);
+    }
+
+
 }

@@ -49,10 +49,6 @@
             <rectangle>
                 <reportElement x="62" y="0" width="431" height="81" forecolor="#FFFFFF" backcolor="#FF4D4A" uuid="839b65a4-859e-4452-b382-727fa259d900"/>
             </rectangle>
-            <image>
-                <reportElement x="80" y="15" width="50" height="50" uuid="115dfb78-945c-4399-bbd8-2c4181f15436"/>
-                <imageExpression><![CDATA["C:/Users/Xande/Downloads/favicon.png"]]></imageExpression>
-            </image>
             <staticText>
                 <reportElement x="176" y="25" width="203" height="30" forecolor="#FFFFFF" uuid="fcb9c8b4-a49c-43fa-8f47-0a4e457a2588"/>
                 <textElement textAlignment="Center" verticalAlignment="Middle">

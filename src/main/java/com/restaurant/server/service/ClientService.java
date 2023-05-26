@@ -19,12 +19,12 @@ public class ClientService {
         return clientRepository.save(user);
     }
 
-    public boolean authenticateClient(String email, String password) {
+    public Client authenticateClient(String email, String password) {
         Client client = clientRepository.findByEmail(email);
         if (client != null && client.getPassword().equals(password)) {
-            return true;
+            return client;
         } else {
-            return false;
+            return null;
         }
     }
 

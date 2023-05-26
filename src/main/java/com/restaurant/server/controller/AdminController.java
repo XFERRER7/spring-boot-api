@@ -31,15 +31,15 @@ public class AdminController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticateAdmin(@RequestBody Admin admin) {
+    public ResponseEntity<Admin> authenticateAdmin(@RequestBody Admin admin) {
         try {
-            boolean response = adminService.authenticateAdmin(admin.getEmail(), admin.getPassword());
+            Admin response = adminService.authenticateAdmin(admin.getEmail(), admin.getPassword());
 
-            if(response) {
-                return ResponseEntity.ok().body("{\"message\": \"Authenticated\"}");
+            if(response != null) {
+                return ResponseEntity.ok().body(response);
             }
             else {
-                return ResponseEntity.badRequest().body("{\"message\": \"Admin not found\"}");
+                return ResponseEntity.badRequest().build();
             }
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
