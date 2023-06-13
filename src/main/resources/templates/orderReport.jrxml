@@ -160,7 +160,7 @@
 							<staticText>
 								<reportElement x="0" y="0" width="190" height="30" backcolor="#5C74FF" uuid="6e6e7a16-f15d-47e7-a3e1-1864e0446abc"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[Data]]></text>
+								<text><![CDATA[Nome do item]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -177,7 +177,7 @@
 							<staticText>
 								<reportElement x="0" y="0" width="130" height="30" uuid="f68399b6-345d-430c-a037-44d3f4835be6"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<text><![CDATA[N itens]]></text>
+								<text><![CDATA[Quantidade]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
