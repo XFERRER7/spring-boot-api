@@ -21,8 +21,8 @@ public class OrderService {
     private final ItemService itemService;
     private final OrderItemService orderItemService;
 
-
-    public OrderService(IOrderRepository orderRepository, ClientService clientService, ItemService itemService, OrderItemService orderItemService) {
+    public OrderService(IOrderRepository orderRepository, ClientService clientService, ItemService itemService,
+            OrderItemService orderItemService) {
         this.orderRepository = orderRepository;
         this.clientService = clientService;
         this.itemService = itemService;
@@ -32,7 +32,7 @@ public class OrderService {
     @Transactional
     public Order createOrder(Long clientId, List<OrderItemRequestDto> items) {
 
-        //Busca e salva os itens em uma lista
+        // Busca e salva os itens em uma lista
         List<Item> listItems = new ArrayList<>();
 
         items.forEach(orderItemRequest -> {
@@ -45,27 +45,28 @@ public class OrderService {
             }
         });
 
-        //Busca e salva o cliente em uma variavel
+        // Busca e salva o cliente em uma variavel
         Client clientSaved = clientService.getClientById(clientId);
 
         if (clientSaved == null) {
             throw new RuntimeException("Client not found");
         }
 
-
-        //Calcula o valor total do pedido
+        // Calcula o valor total do pedido
         Integer amount = 0;
         for (Item item : listItems) {
-            amount += item.getPrice() * items.stream().filter(orderItemRequest -> orderItemRequest.getItemId().equals(item.getId())).findFirst().orElseThrow(() -> new RuntimeException("Order item not found")).getQuantity();
+            amount += item.getPrice()
+                    * items.stream().filter(orderItemRequest -> orderItemRequest.getItemId().equals(item.getId()))
+                            .findFirst().orElseThrow(() -> new RuntimeException("Order item not found")).getQuantity();
         }
-
 
         Order orderSaved = createRawOrder(clientSaved, amount);
 
         List<OrderItem> orderItemsSaved = new ArrayList<>();
         for (Item item : listItems) {
 
-            int quantity = items.stream().filter(orderItemRequest -> orderItemRequest.getItemId().equals(item.getId())).findFirst().orElseThrow(() -> new RuntimeException("Order item not found")).getQuantity();
+            int quantity = items.stream().filter(orderItemRequest -> orderItemRequest.getItemId().equals(item.getId()))
+                    .findFirst().orElseThrow(() -> new RuntimeException("Order item not found")).getQuantity();
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(orderSaved);
@@ -135,42 +136,31 @@ public class OrderService {
         return orderDTOs;
     }
 
-    public List<OrderPdfDTO> getReport() {
+    public OrderDTO getReport(Long id) {
 
-        List<Order> allOrders = orderRepository.findAll();
-        List<OrderPdfDTO> ordersPdf = new ArrayList<>();
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        OrderDTO orderDTO = new OrderDTO();
 
-        for (Order order : allOrders) {
+        orderDTO.setId(order.getId());
+        orderDTO.setAmount(order.getAmount() / 100);
+        orderDTO.setClientName(order.getClient().getName());
+        String date = order.getCreatedAt().substring(0, 10);
+        orderDTO.setCreatedAt(date);
+        
+        List<ItemDTO> itemDTOs = new ArrayList<>();
 
-            OrderPdfDTO orderPdfDTO = new OrderPdfDTO();
+        for (OrderItem orderItem : order.getOrderItems()) {
 
-            orderPdfDTO.setIdOrder(order.getId());
+            ItemDTO itemDTO = new ItemDTO();
+            itemDTO.setName(orderItem.getItem().getName());
+            itemDTO.setQuantity(orderItem.getItemsQuantity());
 
-            orderPdfDTO.setAmount(order.getAmount() / 100);
-
-            String createdAt = order.getCreatedAt();
-            String[] firstSplit = createdAt.split("T");
-            String[] secondtSplit = firstSplit[0].split("-");
-            String createdAtFinal = secondtSplit[2] + "/" + secondtSplit[1] + "/" + secondtSplit[0];
-            orderPdfDTO.setCreatedAt(createdAtFinal);
-
-            for (OrderItem orderItem : order.getOrderItems()) {
-
-                Integer quantity = orderItem.getItemsQuantity();
-
-                if (orderPdfDTO.getItemsQuantity() != null) {
-                    orderPdfDTO.setItemsQuantity(orderPdfDTO.getItemsQuantity() + quantity);
-                }
-                else {
-                    orderPdfDTO.setItemsQuantity(quantity);
-                }
-
-            }
-
-            ordersPdf.add(orderPdfDTO);
+            itemDTOs.add(itemDTO);
         }
 
-        return ordersPdf;
+        orderDTO.setItems(itemDTOs);
+
+        return orderDTO;
 
     }
 }

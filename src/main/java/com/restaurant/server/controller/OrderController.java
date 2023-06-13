@@ -1,6 +1,7 @@
 package com.restaurant.server.controller;
 
 import com.restaurant.server.model.*;
+import com.restaurant.server.model.DTO.ItemDTO;
 import com.restaurant.server.model.DTO.OrderDTO;
 import com.restaurant.server.model.DTO.OrderPdfDTO;
 import com.restaurant.server.model.DTO.OrderRequestDto;
@@ -45,19 +46,24 @@ public class OrderController {
         return orderService.getAllOrders();
     }
 
-    @GetMapping("get-report")
-    public void getReport(HttpServletResponse response) throws JRException, IOException {
+    @GetMapping("get-report/{id}")
+    public void getReport(@PathVariable Long id, HttpServletResponse response) throws JRException, IOException {
 
-        List<OrderPdfDTO> orders = orderService.getReport();
+        OrderDTO order = orderService.getReport(id);
+        List<ItemDTO> items = order.getItems();
 
         String filePath = "src\\main\\resources\\templates\\orderReport.jrxml";
 
         JasperReport report = JasperCompileManager.compileReport(filePath);
 
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(orders);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(items);
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("orderDataSet", dataSource);
+        parameters.put("idOrder", order.getId());
+        parameters.put("clientName", order.getClientName());
+        parameters.put("amount", order.getAmount());
+        parameters.put("createdAt", order.getCreatedAt());
 
         JasperPrint print = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
 
